@@ -10,8 +10,6 @@
  *
  ******************************************************************************/
 
-import edu.princeton.cs.algs4.*;
-
 /**
  *  The {@code Bipartite} class represents a data type for 
  *  determining whether an undirected graph is <em>bipartite</em> or whether

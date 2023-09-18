@@ -34,9 +34,7 @@
  *  
  ******************************************************************************/
 
-import java.util.NoSuchElementException;
-
-/**
+ /**
  *  The {@code Graph} class represents an undirected graph of vertices
  *  named 0 through <em>V</em> – 1.
  *  It supports the following two primary operations: add an edge to the graph,
