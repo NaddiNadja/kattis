@@ -1,11 +1,14 @@
+import sys
+# solution made in collaboration with Theis Helth Stensgaard
+
 # Indexed PQ stolen from 
 # https://medium.com/@me.khoshpasand/indexed-priority-queue-explained-with-the-python-implementation-5f55edd7cdf0
 class IndexedMinPQ:
     def __init__(self,N):
         self.N = N
-        self.key = [None for i in range(self.N)]
-        self.pq = [None for i in range(self.N+1)]
-        self.qp =[None for i in range(self.N)]
+        self.key = [None for _ in range(self.N)]
+        self.pq = [None for _ in range(self.N+1)]
+        self.qp =[None for _ in range(self.N)]
         self.total = 0
 
     def insert(self,i,key):
@@ -66,7 +69,7 @@ class IndexedMinPQ:
         return self.total == 0
 
     def decreaseKey(self,i,key):
-        if i<0 or i> self.N:
+        if i < 0 or i > self.N:
             raise IndexError('index i is not in the range')
         if self.key[i] is None:
             raise IndexError('index i is not in the IndexedMinPQ')
@@ -75,74 +78,75 @@ class IndexedMinPQ:
         self.key[i] = key
         self.__swim(self.qp[i])
 
-    def increaseKey(self,i,key):
-        if i<0 or i> self.N:
-            raise IndexError('index i is not in the range')
-        if self.key[i] is None:
-            raise IndexError('index i is not in the IndexedMinPQ')
-        assert type(i) is int
-        assert key > self.key[i]
-        self.key[i] = key
-        self.__sink(self.qp[i])
-
-
 PRINT = False
-n, m, k = [int(x) for x in input().split()]
+number_of_lines, total_amount_icecreams, number_of_machines = [int(x) for x in input().split()]
 
-lines = []
-indices = {}
-for i in range(m): indices[i] = []
+def readInput():
+    indices = {}
+    for i in range(total_amount_icecreams): # ~ 2 * 10**5, O(m)
+        indices[i] = []
+    
+    i = 0
+    lines = []
+    for line in sys.stdin: # ~ 2 * 10**5, O(n)
+        icecream = int(line) - 1
+        lines.append(icecream)
+        indices[icecream].append(i)
+        i += 1
+        if i == number_of_lines:
+            break
 
-for i in range(n): 
-    icecreamflavor = int(input())-1
-    lines.append(icecreamflavor)
-    indices[icecreamflavor].append(i)
+    for icecream in indices: # O(m)
+        indices[icecream] = indices[icecream][::-1]
 
-if PRINT: print(indices)
+    return [lines, indices]
 
-pq = IndexedMinPQ(m)
-inmachine = [False for _ in range(m)]
-amountofmachinesinuse = 0
+input_lines, indices = readInput()
+pq = IndexedMinPQ(total_amount_icecreams) # ~ 6 * 10**5, O(m)
+inmachine = [False for _ in range(total_amount_icecreams)] # ~ 2 * 10**5, O(m)
 
-sum = 0
-for i in range(n):
-    icecream = lines[i]
+amountofmachinesinuse = 0 # O(1)
+sum = 0 # O(1)
 
-    if PRINT: print("inmachine", inmachine)
+def updatePQ(cur_icecream): # total, O(log m)
+    indices[cur_icecream].pop() # O(1)
+    if len(indices[cur_icecream]) > 0: # O(1)
+        nextIndex = indices[cur_icecream][-1] # O(1)
+        if PRINT: print(f'{cur_icecream+1} is decreased to value {-nextIndex}')
+        if inmachine[cur_icecream]: pq.decreaseKey(cur_icecream, -nextIndex) # O(log m)
+        else: pq.insert(cur_icecream, -nextIndex) # O(log m)
+    else:
+        if inmachine[cur_icecream]: pq.decreaseKey(cur_icecream, -(10**7)) # O(log m)
+        else: pq.insert(cur_icecream, -(10**7)) # O(log m)
 
-    if inmachine[icecream]: 
-        indices[icecream].pop(0)
-        if len(indices[icecream]) > 0:
-            nextIndex = indices[icecream][0]
-            if PRINT: print(f'{icecream} is decreased to value {(-nextIndex, icecream)}')
-            pq.decreaseKey(icecream, -nextIndex)
+for i in range(number_of_lines): # ~ 2 * 10**5, O(n)
+    cur_icecream = input_lines[i] # O(1)
+    if PRINT: print(f'--- new iteration with icecream {cur_icecream+1}') 
+
+    if PRINT: print("inmachine before:", inmachine)
+    if inmachine[cur_icecream]: # O(1)
+        updatePQ(cur_icecream) # O(log m)
         continue
 
-    sum += 1
+    sum += 1 # O(1)
     
-    if amountofmachinesinuse < k:
-        indices[icecream].pop(0)
-        nextIndex = indices[icecream][0]
-        if PRINT: print(f'{icecream} is inserted with value {(-nextIndex, icecream)}')
-        pq.insert(icecream, -nextIndex)
-        amountofmachinesinuse += 1
-        inmachine[icecream] = True
+    if PRINT: print(f'amountofmachinesinuse ({amountofmachinesinuse}) < number_of_machines({number_of_machines}) = {amountofmachinesinuse < number_of_machines}')
+    if amountofmachinesinuse < number_of_machines: # O(1)
+        amountofmachinesinuse += 1 # O(1)
+        updatePQ(cur_icecream) # O(log m)
+        inmachine[cur_icecream] = True # O(1)
         continue
 
     # all machines are in use
     
-    if not pq.isEmpty():
-        fif = pq.deleteMin()  
-        inmachine[fif] = False
+    if PRINT: print(f'pq.isEmpty() = {pq.isEmpty()}')
+    if not pq.isEmpty(): # O(1)
+        fif = pq.deleteMin() # O(log m)
+        if PRINT: print(f'farthest in future = {fif+1}')
+        inmachine[fif] = False # O(1)
 
-    if PRINT: print(f'{icecream} flavor indices: {indices[icecream]}')
-    indices[icecream].pop(0)
-    inmachine[icecream] = True
-    if len(indices[icecream]) > 0:
-        nextIndex = indices[icecream][0]
-        if PRINT: print(f'{icecream} is inserted with value {(-nextIndex, icecream)}')
-        pq.insert(icecream, -nextIndex)
+    if PRINT: print(f'{cur_icecream+1} flavor indices: {indices[cur_icecream]}')
+    updatePQ(cur_icecream) # O(log m)
+    inmachine[cur_icecream] = True # O(1)
 
 print(sum)
-        
-        
