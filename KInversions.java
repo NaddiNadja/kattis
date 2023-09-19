@@ -1,5 +1,3 @@
-package Unfinished;
-
 import java.util.Scanner;
 
 public class KInversions {

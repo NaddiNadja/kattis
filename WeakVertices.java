@@ -1,5 +1,3 @@
-package Unfinished;
-
 public class WeakVertices {
     public static void main(String[] args) {
         Kattio io = new Kattio(System.in);
