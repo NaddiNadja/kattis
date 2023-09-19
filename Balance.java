@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class Balance {
     public static void main(String[] args) {
         Kattio io = new Kattio(System.in);

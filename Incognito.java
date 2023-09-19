@@ -12,7 +12,7 @@ public class Incognito{
             HashMap<String, Integer> hm = new HashMap<String, Integer>();
 
             for(int j = 0; j < n; j++){
-                String name = sc.next(); //unused
+                sc.next(); // name
                 String category = sc.nextLine();
 
                 if(hm.containsKey(category)){

@@ -1,17 +1,14 @@
-import edu.princeton.cs.algs4.Insertion;
-import edu.princeton.cs.algs4.StdIn;
-import edu.princeton.cs.algs4.StdOut;
-
 public class Grades {
     public static void main(String[] args) {
-        int n = StdIn.readInt();
+        Kattio io = new Kattio(System.in);
+        int n = io.getInt();
         GradesPerson[] arr = new GradesPerson[n];
         String name;
         String grade;
 
         for (int i = 0; i<n; i++) {
-            name = StdIn.readString();
-            grade = StdIn.readString();
+            name = io.getWord();
+            grade = io.getWord();
             arr[i] = new GradesPerson(name, grade);
         }
         
@@ -19,7 +16,7 @@ public class Grades {
 
         for (int i = 0; i<n; i++){
             GradesPerson x = arr[i];
-            StdOut.println(x.name);
+            System.out.println(x.name);
         }
     }
 }

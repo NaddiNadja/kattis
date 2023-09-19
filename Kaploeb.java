@@ -7,7 +7,7 @@ public class Kaploeb {
         Kattio io = new Kattio(System.in);
         int l = io.getInt();
         int k = io.getInt();
-        int s = io.getInt();
+        io.getInt(); // s
 
         HashMap<Integer, Person> runners = new HashMap<>();
         ArrayList<Person> finishers = new ArrayList<>();

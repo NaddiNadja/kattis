@@ -35,13 +35,13 @@ public class Divisors {
         
         BigInteger i = new BigInteger("1");
         BigInteger ZERO = new BigInteger("0");
-        // while (i.compareTo(x.sqrt())<=0) {
-        //     if (x.mod(i).equals(ZERO)){
-        //         sum++;
-        //         if (!i.multiply(i).equals(x)) sum++;
-        //     }
-        //     i= i.add(new BigInteger("1"));
-        // }
+        while (i.compareTo(x.sqrt())<=0) {
+            if (x.mod(i).equals(ZERO)){
+                sum++;
+                if (!i.multiply(i).equals(x)) sum++;
+            }
+            i= i.add(new BigInteger("1"));
+        }
         return sum;
     }
 
