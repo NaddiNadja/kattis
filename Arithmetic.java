@@ -1,4 +1,3 @@
-package Unfinished;
 import java.util.HashMap;
 
 public class Arithmetic {
