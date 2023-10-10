@@ -1,31 +1,14 @@
-import sys
-import time
-
-start_time = time.time()    
-
-sys.setrecursionlimit(2_000_000)
-
 n = int(input())
 s = input()
 
-opt = {}
+moves = 0
+avalue = 'A'
 
-def solve(s, i, flipped):
-    if (i, flipped) in opt: 
-        return opt[(i, flipped)] 
-    if i < 0: 
-        return 0
-
-    cur = s[i] 
-    if cur == 'A' and not flipped or cur == 'B' and flipped:
-        result = solve(s, i-1, flipped)
-    else:
-        fliponce = 1 + solve(s, i-1, flipped)
-        flipall = 1 + solve(s, i-1, not flipped)
-        result = fliponce if fliponce < flipall else flipall
-    opt[(i, flipped)] = result
-    return result
-
-print(solve(s, n-1, False))
-
-print("--- %s seconds ---" % (time.time() - start_time))
+for i in range(len(s)-1, -1, -1):
+    if s[i] == avalue: 
+        continue
+    moves += 1
+    if s[i-1] != avalue:
+        avalue = 'A' if avalue == 'B' else 'B'
+    
+print(moves)
