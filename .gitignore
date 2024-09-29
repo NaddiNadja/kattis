@@ -2,4 +2,6 @@
 *.txt
 *.in
 
+*out
+
 .vscode
